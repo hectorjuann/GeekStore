@@ -196,9 +196,8 @@ public class Compra {
 			this.formaPagamento = input.next().charAt(0);
 			
 			if (this.formaPagamento == 'c' || this.formaPagamento == 'C') {
-				int vezes;
 				System.out.println("Você quer pagar em quantas vezes?");
-				vezes = input.nextInt();
+				int vezes = input.nextInt();
 				parar = true;
 				
 			} else if (this.formaPagamento == 'd' || this.formaPagamento == 'D') {
@@ -232,7 +231,6 @@ public class Compra {
 		System.out.println("GeekStore");
 		System.out.println("##########################################");
 		historico = repNotaFiscal.guardarHistorico();
-		conexao.mostrarHistorico(cliente.getId_cliente());
 		
 		return historico;
 	}		

@@ -15,7 +15,6 @@ public class Main {
 		int id_cliente = 0;
 		int id_endereco = 0;
 		Clientes auxiliar = new Clientes();
-		Historico historico = new Historico();
 		Conexao conexao = new Conexao();
 
 		System.out.println("############### BEM VINDO A GEEKSTORE ###############");

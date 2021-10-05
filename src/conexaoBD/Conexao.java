@@ -11,8 +11,6 @@ import java.util.Scanner;
 import geekStore.ActionFigures;
 import geekStore.Camisas;
 import geekStore.Clientes;
-import geekStore.Historico;
-import geekStore.NotaFiscal2;
 import geekStore.Produtos;
 
 public class Conexao {
@@ -159,10 +157,8 @@ System.out.println(desc);
 
 
 	public int cadastroClientes() {
-		Scanner input = new Scanner(System.in);
 		String nome = null, cpf = null, email = null, senha = null;
 		int idade = 0;
-		int id = 0;
 
 		PreparedStatement st;
 
@@ -209,7 +205,6 @@ System.out.println(desc);
 	}
 
 	public int cadastroEndereco(int id_cliente) {
-		Scanner input = new Scanner(System.in);
 		String cep = null, estado = null, cidade = null, bairro = null, rua = null;
 		int numero = 0;
 

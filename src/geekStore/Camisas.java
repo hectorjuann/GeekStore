@@ -50,10 +50,5 @@ public class Camisas extends Produtos{
 				"\nTamanho: \t" + tamanho + " " + 
 				"\nGênero: \t" + genero + "\n";
 	}
-
-	public void gerarNota() {
-		NotaFiscal2 nota = new NotaFiscal2();
-		nota.setDescricao(this.toString());
-	}
 	
 }

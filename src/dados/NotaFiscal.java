@@ -3,7 +3,6 @@ package dados;
 import java.util.ArrayList;
 import java.util.List;
 
-import geekStore.NotaFiscal2;
 import geekStore.Produtos;
 import geekStore.RepositorioProdutos;
 
@@ -60,12 +59,10 @@ public class NotaFiscal implements RepositorioProdutos{
 	
 	@Override
 	public String guardarHistorico() {
-		NotaFiscal2 nota = new NotaFiscal2();
 		String textoFinal = null;
 		
 		for(Produtos procurarProdutos : DadosNotaFiscal) {
 			textoFinal = procurarProdutos.toString();
-			nota.setDescricao(textoFinal);
 			
 	} return textoFinal;
 	}
