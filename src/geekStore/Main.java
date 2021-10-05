@@ -3,7 +3,6 @@ package geekStore;
 import java.util.Scanner;
 
 import conexaoBD.Conexao;
-import dados.ListaClientes;
 
 public class Main {
 

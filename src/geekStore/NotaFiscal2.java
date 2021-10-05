@@ -17,5 +17,4 @@ public class NotaFiscal2 {
 		this.descricao = descricao;
 	}
 	
-	
 }

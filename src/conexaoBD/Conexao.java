@@ -1,16 +1,17 @@
 package conexaoBD;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Scanner;
 
-import dados.NotaFiscal;
 import geekStore.ActionFigures;
 import geekStore.Camisas;
 import geekStore.Clientes;
-import geekStore.NotaFiscal2;
 import geekStore.Produtos;
-import geekStore.RepositorioProdutos;
-
-import java.sql.*;
 
 public class Conexao {
 	Scanner input = new Scanner(System.in);
@@ -65,7 +66,7 @@ public class Conexao {
 
 	}
 
-	public Produtos selecionarCamisa(int id, String tabela) {
+	public Produtos selecionarProdutos(int id, String tabela) {
 		Camisas camisa = new Camisas();
 		ActionFigures boneco = new ActionFigures();
 		Produtos produto = new Produtos();
@@ -88,7 +89,6 @@ public class Conexao {
 					camisa.setGenero(rs.getString("genero"));
 
 					produto = camisa;
-					System.out.println(produto.toString());
 				} else {
 					return produto = null;
 				}
@@ -102,7 +102,6 @@ public class Conexao {
 					boneco.setPreco(rs.getDouble("preco"));
 					boneco.setTamanho(rs.getInt("tamanho"));
 					produto = boneco;
-					System.out.println(produto.toString());
 				} else {
 					return produto = null;
 				}
@@ -115,7 +114,18 @@ public class Conexao {
 		return produto;
 	}
 
-	public void inserirHistorico(String descricao) {
+	public void inserirHistorico(String descricao, int id) {
+		try {
+			PreparedStatement st = conexao.prepareStatement("SELECT descricao FROM historico JOIN clientes WHERE id_clientes_fk = id_clientes and id_clientes = " + id);
+			ResultSet rs = st.executeQuery();
+			System.out.println(rs);
+			
+		} catch (SQLException e1) {
+			e1.printStackTrace();
+		}
+		
+		
+		
 		PreparedStatement stmt;
 		String query = "INSERT INTO historico (descricao) VALUES (?)";
 		System.out.println();
@@ -254,15 +264,12 @@ public class Conexao {
 			try {
 				PreparedStatement st = conexao.prepareStatement("SELECT * FROM clientes WHERE cpf = " + inputCpf);
 				ResultSet rs = st.executeQuery();
-
 				if (rs != null && rs.next()) {
 					String s = rs.getString("senha");
-
 					if ( s.equals(inputSenha) ) {
 						System.out.println("Senha correta");
 						logado = 1;
 					}
-					
 					else {
 						System.out.println("CPF ou SENHA incorretos");
 						System.out.println("-------------- MENU --------------");

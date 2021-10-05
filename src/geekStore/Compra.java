@@ -68,22 +68,6 @@ public class Compra {
 	public void comprar() {	
 		Conexao conexao = new Conexao();
 		Produtos produtoLocal = new Produtos();
-		Produtos auxiliarCamisas = new Produtos();
-		Produtos auxiliarActionFigures = new ActionFigures();
-				
-		Camisas c1 = new Camisas("Regata", 111, 19.99, "P", "azul", "F");
-		repCamisas.inserir(c1);
-		Camisas c2 = new Camisas("Blusa", 222, 29.99, "M", "vermelha", "M");
-		repCamisas.inserir(c2);
-		Camisas c3 = new Camisas("Camiseta", 333, 39.99, "G", "verde", "M");
-		repCamisas.inserir(c3);
-		
-		ActionFigures a1 = new ActionFigures("Homem Aranha", 444, 180.99, 30, "Super Heroi", true);
-		repActionFigures.inserir(a1);
-		ActionFigures a2 = new ActionFigures("Batman", 555, 200.00, 100, "Super Heroi", true);
-		repActionFigures.inserir(a2);
-		ActionFigures a3 = new ActionFigures("Goku", 666, 229.99, 40, "Anime", false);
-		repActionFigures.inserir(a3);
 		
 		int quantidade;
 		double preco;
@@ -131,9 +115,9 @@ public class Compra {
 				do {	
 					System.out.println("Digite o código do produto desejado: ");
 					inputId = input.nextInt();
-					produtoLocal = conexao.selecionarCamisa(inputId, tabela);
+					produtoLocal = conexao.selecionarProdutos(inputId, tabela);
 					
-					if (conexao.selecionarCamisa(inputId, tabela) == null) {
+					if (conexao.selecionarProdutos(inputId, tabela) == null) {
 						System.out.println("\nNão encontramos este produto.\nPor favor, selecione um item em estoque.\n");
 						parar = false;
 					} else {
@@ -232,8 +216,8 @@ public class Compra {
 		} while (parar == false);
 	}
 	
-		private void imprimirNota() {
-			String historico;
+		private NotaFiscal2 imprimirNota() {
+		String historico;
 		Conexao conexao = new Conexao();
 		NotaFiscal2 nota = new NotaFiscal2();
 		System.out.println("\n");
@@ -247,7 +231,8 @@ public class Compra {
 		System.out.println("GeekStore");
 		System.out.println("##########################################");
 		historico = repNotaFiscal.guardarHistorico();
-		conexao.inserirHistorico(historico);
+		conexao.inserirHistorico(historico, cliente.getId_cliente());
+		return nota;
 	}		
 						
 	@Override
