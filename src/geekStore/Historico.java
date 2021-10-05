@@ -1,13 +1,13 @@
 package geekStore;
 
-public class NotaFiscal2 {
+public class Historico {
 	int id;
 	String descricao;
-	
-	public NotaFiscal2() {
-		
+
+	public Historico() {
+
 	}
-	
+
 	public int getId() {
 		return id;
 	}
@@ -20,5 +20,6 @@ public class NotaFiscal2 {
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
 	}
-	
+
+
 }

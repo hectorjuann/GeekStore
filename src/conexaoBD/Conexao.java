@@ -11,6 +11,8 @@ import java.util.Scanner;
 import geekStore.ActionFigures;
 import geekStore.Camisas;
 import geekStore.Clientes;
+import geekStore.Historico;
+import geekStore.NotaFiscal2;
 import geekStore.Produtos;
 
 public class Conexao {
@@ -114,31 +116,62 @@ public class Conexao {
 		return produto;
 	}
 
-	public void inserirHistorico(String descricao, int id) {
+	public void guardarHistorico(String desc_novo, int id) {
+		String desc = null;
 		try {
 			PreparedStatement st = conexao.prepareStatement("SELECT descricao FROM historico JOIN clientes WHERE id_clientes_fk = id_clientes and id_clientes = " + id);
 			ResultSet rs = st.executeQuery();
-			System.out.println(rs);
 			
+			if (rs.next()) {
+				desc = rs.getString("descricao");	
+			}
+			
+			System.out.println(desc);
 		} catch (SQLException e1) {
 			e1.printStackTrace();
 		}
 		
-		
-		
-		PreparedStatement stmt;
-		String query = "INSERT INTO historico (descricao) VALUES (?)";
-		System.out.println();
-
 		try {
-			stmt = conexao.prepareStatement(query);
-			stmt.setString(1, descricao);
-			stmt.executeUpdate();
+			PreparedStatement st2 = conexao.prepareStatement("UPDATE historico SET descricao = '"+ desc_novo +"'  WHERE id_clientes_fk = " + id);
+			st2.executeUpdate();
 		} catch (SQLException e) {
 			System.out.println("Não foi possivel inserir na tabela de historico");
 			e.printStackTrace();
 		}
+		
+	
+		try {
+			PreparedStatement st3 = conexao.prepareStatement("SELECT descricao FROM historico JOIN clientes WHERE id_clientes_fk = id_clientes and id_clientes = " + id);
+			ResultSet rs = st3.executeQuery();
+			
+			if (rs.next()) {
+				desc = rs.getString("descricao");	
+			}
+
+			System.out.println(desc);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
+
+	public String mostrarHistorico(int id) {
+		String desc = null;
+
+		try {
+			PreparedStatement st = conexao.prepareStatement("SELECT descricao FROM historico JOIN clientes WHERE id_clientes_fk = id_clientes and id_clientes = " + id);
+			ResultSet rs = st.executeQuery();
+
+			if (rs.next()) {
+				desc = rs.getString("descricao");
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return desc;
+
+	}
+
 
 	public int cadastroClientes() {
 		Scanner input = new Scanner(System.in);
@@ -190,7 +223,7 @@ public class Conexao {
 		return id_cliente;
 	}
 
-	public int cadastroEndereco() {
+	public int cadastroEndereco(int id_cliente) {
 		Scanner input = new Scanner(System.in);
 		String cep = null, estado = null, cidade = null, bairro = null, rua = null;
 		int numero = 0;
@@ -198,7 +231,7 @@ public class Conexao {
 		PreparedStatement st;
 
 		try {
-			st = conexao.prepareStatement("INSERT INTO enderecos (cep, estado, cidade, bairro, rua, numero) VALUES (?, ?, ?, ?, ?, ?)",
+			st = conexao.prepareStatement("INSERT INTO enderecos (cep, estado, cidade, bairro, rua, numero, id_clientes_fk) VALUES (?, ?, ?, ?, ?, ?, ?)",
 					Statement.RETURN_GENERATED_KEYS);
 
 			System.out.println("Informe o seu CEP:");
@@ -225,6 +258,8 @@ public class Conexao {
 			numero = input.nextInt();
 			st.setInt(6, numero);
 
+			st.setInt(7, id_cliente);
+
 			st.executeUpdate();
 
 			ResultSet rs = st.getGeneratedKeys();
@@ -242,57 +277,40 @@ public class Conexao {
 		return id_endereco;
 	}
 
-
-	public void setEndereco (int id_cliente, int id_endereco) {
-
+	public void cadastroHistorico(int id_clientes) {
 		try {
-			PreparedStatement st = conexao.prepareStatement("UPDATE clientes SET endereco = " + id_endereco + " WHERE id_clientes = " + id_cliente);
+			PreparedStatement st = conexao.prepareStatement("INSERT INTO historico (id_clientes_fk) VALUES (?)");
+			st.setInt(1, id_clientes);	
 			st.executeUpdate();
+			
+				st.setInt(1, id_clientes);	
+			
+
 		} catch (SQLException e) {
-			System.out.println("Não foi possível setar o endereço");
 			e.printStackTrace();
 		}
-
 	}
-
-
 
 	public int login(String inputCpf, String inputSenha) {
 		int respInt;
 		int logado = 0;
 
-			try {
-				PreparedStatement st = conexao.prepareStatement("SELECT * FROM clientes WHERE cpf = " + inputCpf);
-				ResultSet rs = st.executeQuery();
-				if (rs != null && rs.next()) {
-					String s = rs.getString("senha");
-					if ( s.equals(inputSenha) ) {
-						System.out.println("Senha correta");
-						logado = 1;
-					}
-					else {
-						System.out.println("CPF ou SENHA incorretos");
-						System.out.println("-------------- MENU --------------");
-						System.out.println("[1] Tentar Novamente\n[2] Voltar");
-						System.out.println("----------------------------------");
-						respInt = input.nextInt();
-
-						switch (respInt) {
-						case 1:
-							logado = 3;
-							break;
-						case 2: 
-							logado = 2;
-							break;
-						}
-					}
-				} else {
-					System.out.println("Não achamos seu CPF na base de dados");
-					System.out.println("\n");
+		try {
+			PreparedStatement st = conexao.prepareStatement("SELECT * FROM clientes WHERE cpf = " + inputCpf);
+			ResultSet rs = st.executeQuery();
+			if (rs != null && rs.next()) {
+				String s = rs.getString("senha");
+				if ( s.equals(inputSenha) ) {
+					System.out.println("Senha correta");
+					logado = 1;
+				}
+				else {
+					System.out.println("CPF ou SENHA incorretos");
 					System.out.println("-------------- MENU --------------");
 					System.out.println("[1] Tentar Novamente\n[2] Voltar");
 					System.out.println("----------------------------------");
 					respInt = input.nextInt();
+
 					switch (respInt) {
 					case 1:
 						logado = 3;
@@ -302,13 +320,29 @@ public class Conexao {
 						break;
 					}
 				}
-			} catch (SQLException e) {
-				e.printStackTrace();
+			} else {
+				System.out.println("Não achamos seu CPF na base de dados");
+				System.out.println("\n");
+				System.out.println("-------------- MENU --------------");
+				System.out.println("[1] Tentar Novamente\n[2] Voltar");
+				System.out.println("----------------------------------");
+				respInt = input.nextInt();
+				switch (respInt) {
+				case 1:
+					logado = 3;
+					break;
+				case 2: 
+					logado = 2;
+					break;
+				}
 			}
-		
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
 		return logado;
 	}
-	
+
 	public void deleteConta(int id_cliente) {
 		try {
 			PreparedStatement st = conexao.prepareStatement("DELETE FROM clientes WHERE id_clientes = ?");
@@ -326,7 +360,7 @@ public class Conexao {
 			PreparedStatement st = conexao.prepareStatement("SELECT * FROM clientes WHERE cpf = ?");
 			st.setString(1, cpf_cliente);
 			ResultSet rs = st.executeQuery();
-			
+
 			if (rs.next()) {
 				cliente.setCpf(rs.getString("cpf"));
 				cliente.setEmail(rs.getString("email"));
@@ -335,13 +369,13 @@ public class Conexao {
 				cliente.setNome(rs.getString("nome"));
 				cliente.setSenha(rs.getString("senha"));	
 			}
-			
-			
+
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		
+
 		return cliente;
-		
+
 	}
 }

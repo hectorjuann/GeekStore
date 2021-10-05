@@ -231,7 +231,9 @@ public class Compra {
 		System.out.println("GeekStore");
 		System.out.println("##########################################");
 		historico = repNotaFiscal.guardarHistorico();
-		conexao.inserirHistorico(historico, cliente.getId_cliente());
+		
+		conexao.mostrarHistorico(cliente.getId_cliente());
+		
 		return nota;
 	}		
 						
