@@ -62,6 +62,7 @@ public class NotaFiscal implements RepositorioProdutos{
 	public String guardarHistorico() {
 		NotaFiscal2 nota = new NotaFiscal2();
 		String textoFinal = null;
+		
 		for(Produtos procurarProdutos : DadosNotaFiscal) {
 			textoFinal = procurarProdutos.toString();
 			nota.setDescricao(textoFinal);

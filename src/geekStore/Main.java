@@ -82,7 +82,7 @@ public class Main {
 							
 						case 2:
 							System.out.println("Aqui está o seu histórico:");
-							conexao.mostrarHistorico(id_cliente);
+							conexao.mostrarHistorico(auxiliar.getId_cliente());
 							//auxiliar.mostrarHistorico();
 							parar = false;
 							break;
@@ -92,7 +92,10 @@ public class Main {
 							int resp = input.nextInt();
 							
 							if (resp == 1) {
-								conexao.deleteConta(auxiliar.getId_cliente());		
+								conexao.deleteConta(auxiliar.getId_cliente());	
+								System.out.println("Conta deletada com sucesso");
+								parar = true;
+								break;
 							} else {
 								System.out.println("Conta não foi excluida");
 							}

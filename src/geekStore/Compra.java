@@ -127,6 +127,8 @@ public class Compra {
 				} while (parar == false);
 
 			preco = produtoLocal.getPreco();
+			String concat = produtoLocal.toString();
+			conexao.guardarHistorico(concat, cliente.getId_cliente());
 			System.out.println("Preço do produto: R$" + preco);
 			
 			System.out.println("\nQuantidade de produtos: ");
@@ -216,10 +218,9 @@ public class Compra {
 		} while (parar == false);
 	}
 	
-		private NotaFiscal2 imprimirNota() {
+		private String imprimirNota() {
 		String historico;
 		Conexao conexao = new Conexao();
-		NotaFiscal2 nota = new NotaFiscal2();
 		System.out.println("\n");
 		System.out.println("############## Nota Fiscal ##############\n");
 		System.out.println("NOME DO CLIENTE: " + cliente.getNome());
@@ -231,10 +232,9 @@ public class Compra {
 		System.out.println("GeekStore");
 		System.out.println("##########################################");
 		historico = repNotaFiscal.guardarHistorico();
-		
 		conexao.mostrarHistorico(cliente.getId_cliente());
 		
-		return nota;
+		return historico;
 	}		
 						
 	@Override

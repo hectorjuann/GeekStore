@@ -125,33 +125,18 @@ public class Conexao {
 			if (rs.next()) {
 				desc = rs.getString("descricao");	
 			}
-			
-			System.out.println(desc);
 		} catch (SQLException e1) {
 			e1.printStackTrace();
 		}
 		
 		try {
-			PreparedStatement st2 = conexao.prepareStatement("UPDATE historico SET descricao = '"+ desc_novo +"'  WHERE id_clientes_fk = " + id);
+			PreparedStatement st2 = conexao.prepareStatement("UPDATE historico SET descricao = '"+ desc + "\n" + desc_novo +"'  WHERE id_clientes_fk = " + id);
 			st2.executeUpdate();
 		} catch (SQLException e) {
 			System.out.println("Não foi possivel inserir na tabela de historico");
 			e.printStackTrace();
 		}
 		
-	
-		try {
-			PreparedStatement st3 = conexao.prepareStatement("SELECT descricao FROM historico JOIN clientes WHERE id_clientes_fk = id_clientes and id_clientes = " + id);
-			ResultSet rs = st3.executeQuery();
-			
-			if (rs.next()) {
-				desc = rs.getString("descricao");	
-			}
-
-			System.out.println(desc);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
 	}
 
 	public String mostrarHistorico(int id) {
@@ -164,7 +149,7 @@ public class Conexao {
 			if (rs.next()) {
 				desc = rs.getString("descricao");
 			}
-
+System.out.println(desc);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -345,9 +330,17 @@ public class Conexao {
 
 	public void deleteConta(int id_cliente) {
 		try {
-			PreparedStatement st = conexao.prepareStatement("DELETE FROM clientes WHERE id_clientes = ?");
+			PreparedStatement st = conexao.prepareStatement("DELETE FROM enderecos WHERE id_clientes_fk = ?");
 			st.setInt(1, id_cliente);
 			st.executeUpdate();
+			
+			PreparedStatement st2 = conexao.prepareStatement("DELETE FROM historico WHERE id_clientes_fk = ?");
+			st2.setInt(1, id_cliente);
+			st2.executeUpdate();
+			
+			PreparedStatement st3 = conexao.prepareStatement("DELETE FROM clientes WHERE id_clientes = ?");
+			st3.setInt(1, id_cliente);
+			st3.executeUpdate();
 		} catch (SQLException e) {
 			System.out.println("Não foi possível deletar a conta");
 			e.printStackTrace();
