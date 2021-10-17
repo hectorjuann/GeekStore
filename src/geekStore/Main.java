@@ -14,6 +14,7 @@ public class Main {
 		int respInt = 0;
 		int id_cliente = 0;
 		int id_endereco = 0;
+		int logado = 0;
 		Clientes auxiliar = new Clientes();
 		Conexao conexao = new Conexao();
 
@@ -38,10 +39,9 @@ public class Main {
 
 					System.out.println("Digite sua SENHA:");
 					String inputSenha = input.next();
-					int logado = conexao.login(inputCpf, inputSenha);	
+					logado = conexao.login(inputCpf, inputSenha);	
 					auxiliar = conexao.selectCliente(inputCpf);
 					if (logado == 1) {
-						
 						parar = true;
 						respInt = 1;
 					} else if (logado == 2) {
@@ -53,6 +53,10 @@ public class Main {
 					
 				}while (parar == false);
 
+				if (logado == 2) {
+					break;
+				}
+				
 				switch (respInt) {
 				case 1:
 					do {
